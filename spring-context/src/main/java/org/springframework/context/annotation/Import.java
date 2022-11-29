@@ -56,6 +56,10 @@ import java.lang.annotation.Target;
 public @interface Import {
 
 	/**
+	 * TODO
+	 * 1.直接写class,利用无参构造器创建一个属性为null的对象
+	 * 2.ImportBeanDefinitionRegistrar实现该接口，注册bean
+	 *
 	 * {@link Configuration @Configuration}, {@link ImportSelector},
 	 * {@link ImportBeanDefinitionRegistrar}, or regular component classes to import.
 	 */
