@@ -1,6 +1,8 @@
 package com.atguigu.spring;
 
 import com.atguigu.spring.bean.Person;
+import com.atguigu.spring.circle.B;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -11,8 +13,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class MainTest {
 
 	public static void main(String[] args) {
-		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean.xml");
-		Person bean = applicationContext.getBean(Person.class);
+		BeanFactory applicationContext = new ClassPathXmlApplicationContext("bean2.xml");
+//		Cat bean = (Cat) applicationContext.getBean("cat");
+//		System.out.println(bean.getName());
+//		Cat car = (Cat) applicationContext.getBean("cat");
+//		System.out.println(car.getName());
+		B bean = applicationContext.getBean(B.class);
 		System.out.println(bean);
 
 	}

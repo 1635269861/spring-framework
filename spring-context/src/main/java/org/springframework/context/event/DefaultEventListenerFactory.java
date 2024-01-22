@@ -53,7 +53,7 @@ public class DefaultEventListenerFactory implements EventListenerFactory, Ordere
 
 	@Override
 	public ApplicationListener<?> createApplicationListener(String beanName, Class<?> type, Method method) {
-		return new ApplicationListenerMethodAdapter(beanName, type, method);
+		return new ApplicationListenerMethodAdapter(beanName, type, method); // 创建一个监听器
 	}
 
 }

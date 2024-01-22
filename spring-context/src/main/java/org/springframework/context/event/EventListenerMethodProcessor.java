@@ -85,17 +85,17 @@ public class EventListenerMethodProcessor
 		this.evaluator = new EventExpressionEvaluator();
 	}
 
-	@Override
+	@Override // 因为实现了ApplicationbAware接口，所以在创建EventListenerMethodProcessor这个对象的时候，会调用set方法，该对象会在invokeBeanFactoryPostProcessors方法的时候创建，u因为这是一个BeanFactoryPostProcessor
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		Assert.isTrue(applicationContext instanceof ConfigurableApplicationContext,
 				"ApplicationContext does not implement ConfigurableApplicationContext");
 		this.applicationContext = (ConfigurableApplicationContext) applicationContext;
 	}
 
-	@Override
+	@Override // 后置增强环节
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
-
+		// 拿到所有的EventListenFactory，并排好序，
 		Map<String, EventListenerFactory> beans = beanFactory.getBeansOfType(EventListenerFactory.class, false, false);
 		List<EventListenerFactory> factories = new ArrayList<>(beans.values());
 		AnnotationAwareOrderComparator.sort(factories);
@@ -103,7 +103,7 @@ public class EventListenerMethodProcessor
 	}
 
 
-	@Override
+	@Override // 最后的初始化环节，该方法在所有的单例对象创建完成之后执行回调，为我们标注了EventListener注解的方法每一个创建一个监听器，实现的是对应的是SmartInitializingSingleton这个接口的方法
 	public void afterSingletonsInstantiated() {
 		ConfigurableListableBeanFactory beanFactory = this.beanFactory;
 		Assert.state(this.beanFactory != null, "No ConfigurableListableBeanFactory set");
@@ -183,11 +183,11 @@ public class EventListenerMethodProcessor
 						if (factory.supportsMethod(method)) {
 							Method methodToUse = AopUtils.selectInvocableMethod(method, context.getType(beanName));
 							ApplicationListener<?> applicationListener =
-									factory.createApplicationListener(beanName, targetType, methodToUse);
+									factory.createApplicationListener(beanName, targetType, methodToUse); // 创建一个监听器
 							if (applicationListener instanceof ApplicationListenerMethodAdapter) {
 								((ApplicationListenerMethodAdapter) applicationListener).init(context, this.evaluator);
 							}
-							context.addApplicationListener(applicationListener);
+							context.addApplicationListener(applicationListener); // 把监听器放到容器中，对应的是事件多播器和容器中
 							break;
 						}
 					}

@@ -207,6 +207,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Create a new AbstractBeanDefinition with default settings.
 	 */
+	// 只要有任何的组件组册到beanFactory，就会调用这个根构造器，因为所有的对象都得先有bean的定义信息
 	protected AbstractBeanDefinition() {
 		this(null, null);
 	}

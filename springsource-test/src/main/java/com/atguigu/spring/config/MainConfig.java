@@ -3,44 +3,46 @@ package com.atguigu.spring.config;
 import com.atguigu.spring.bean.Cat;
 import com.atguigu.spring.bean.Person;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @author liyongqi.0501
- * @date 2022/11/29 5:51 PM
+ * @date 2023/6/11 1:20 PM
  * @description
  */
 @Configuration
-//@Import({ MainConfig.MyImportRegister.class})
-@ComponentScan("com.atguigu.spring")
+//@ComponentScan(basePackages = {"com.atguigu.spring.bean", "com.atguigu.spring.listeners"})
+//@ComponentScan(basePackages = {"com.atguigu.spring.bean"})
+
+//@ComponentScan(basePackages = {"com.atguigu.spring.circle"})
+@ComponentScan(basePackages = {"com.atguigu.spring.listeners"})
+// 使用Import导入对象
+@Import({Person.class, MainConfig.MyImportBeanDefinitionRegister.class})
 public class MainConfig {
 
 //	@Bean
-	public Person person(){
-		Person person = new Person();
-		person.setName("里斯");
-		return person;
+//	public Person person(){
+//		Person person = new Person();
+//		person.setName("李永琪");
+//		return person;
+//	}
+
+	@Bean
+	public Cat cat(){
+		return new Cat();
 	}
 
-
-   public static class MyImportRegister implements ImportBeanDefinitionRegistrar{
-
-		/**
-		 *
-		 * @param importingClassMetadata annotation metadata of the importing class
-		 * @param registry current bean definition registry Bean定义信息的注册中心
-		 *                       里面都是BeanDefinition，不可以给属性设置，只能设置类的相关信息
-		 */
+	 static class MyImportBeanDefinitionRegister implements ImportBeanDefinitionRegistrar{
 		@Override
-		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-			RootBeanDefinition catBeanDefinition = new RootBeanDefinition();
-			catBeanDefinition.setBeanClass(Cat.class);
-			// spring 这个实例的名字
-			registry.registerBeanDefinition("tomCat", catBeanDefinition);
+		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+											BeanDefinitionRegistry registry) {
+			// Bean Definition
+			RootBeanDefinition catDefinition = new RootBeanDefinition();
+			catDefinition.setBeanClass(Cat.class);
+			// 可以声明定义信息，不是实例化对象的方法
+			registry.registerBeanDefinition("tomcat", catDefinition);
 		}
 	}
-
 }
